@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.coupon.CouponUserMapper">
+    <resultMap id="BaseResultMap" type="com.graduation.coupon.CouponUserDO">
+        <id column="id" property="id"/>
+        <result column="coupon_id" property="couponId"/>
+        <result column="user_id" property="userId"/>
+        <result column="num" property="num"/>
+        <result column="valid_start_date" property="validStartDate"/>
+        <result column="valid_end_date" property="validEndDate"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.graduation.coupon.CouponUserDO">
+        insert into coupon_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponId != null">`coupon_id`,</if>
+            <if test="userId != null">`user_id`,</if>
+            <if test="num != null">`num`,</if>
+            <if test="validStartDate != null">`valid_start_date`,</if>
+            <if test="validEndDate != null">`valid_end_date`,</if>
+            `create_time`,
+            `update_time`
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couponId != null">#{couponId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="num != null">#{num},</if>
+            <if test="validStartDate != null">#{validStartDate},</if>
+            <if test="validEndDate != null">#{validEndDate},</if>
+            now(),
+            now()
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="com.graduation.coupon.CouponUserDO">
+        update coupon_user
+        <set>
+            <if test="couponId != null">`coupon_id` = #{couponId},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="num != null">`num` = #{num},</if>
+            <if test="validStartDate != null">`valid_start_date` = #{validStartDate},</if>
+            <if test="validEndDate != null">`valid_end_date` = #{validEndDate},</if>
+            `update_time` = now()
+        </set>
+        where `id` = #{id}
+    </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from coupon_user where `id` = #{id}
+    </delete>
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from coupon_user where `id` = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        select t1.*, t2.name couponName, t3.name userName from coupon_user t1
+						left join coupon t2 on t1.coupon_id = t2.id
+						left join client_user t3 on t1.user_id = t3.id
+        <where>
+            <if test="couponId != null and couponId !=''">and t1.`coupon_id` = #{couponId}</if>
+            <if test="userId != null and userId !=''">and t1.`user_id` = #{userId}</if>
+            <if test="num != null and num !=''">and t1.`num` = #{num}</if>
+            <if test="validStartDate != null and validStartDate !=''">and t1.`valid_start_date` like concat('%', #{validStartDate}, '%')</if>
+             <if test="validEndDate != null and validEndDate !=''">and t1.`valid_end_date` like concat('%', #{validEndDate}, '%')</if>
+         </where>
+        <if test="limit != null">
+                limit #{limit}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from coupon_user
+        <where>
+            <if test="couponId != null and couponId !=''">and `coupon_id` = #{couponId}</if>
+            <if test="userId != null and userId !=''">and `user_id` = #{userId}</if>
+            <if test="num != null and num !=''">and `num` = #{num}</if>
+            <if test="validStartDate != null and validStartDate !=''">and `valid_start_date` like concat('%', #{validStartDate}, '%')</if>
+            <if test="validEndDate != null and validEndDate !=''">and `valid_end_date` like concat('%', #{validEndDate}, '%')</if>
+        </where>
+    </select>
+</mapper>

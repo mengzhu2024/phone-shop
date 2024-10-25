@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.user.ClientUserMapper">
+    <resultMap id="BaseResultMap" type="com.graduation.user.ClientUserDO">
+        <id column="id" property="id"/>
+        <result column="phone" property="phone"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="password" property="password"/>
+        <result column="default_address" property="defaultAddress"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.graduation.user.ClientUserDO">
+        insert into client_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="phone != null">`phone`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="sex != null">`sex`,</if>
+            <if test="password != null">`password`,</if>
+            <if test="defaultAddress != null">`default_address`,</if>
+            `create_time`,
+            `update_time`
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="phone != null">#{phone},</if>
+            <if test="name != null">#{name},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="password != null">#{password},</if>
+            <if test="defaultAddress != null">#{defaultAddress},</if>
+            now(),
+            now()
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="com.graduation.user.ClientUserDO">
+        update client_user
+        <set>
+            <if test="phone != null">`phone` = #{phone},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="sex != null">`sex` = #{sex},</if>
+            <if test="password != null">`password` = #{password},</if>
+            <if test="defaultAddress != null">`default_address` = #{defaultAddress},</if>
+            `update_time` = now()
+        </set>
+        where `id` = #{id}
+    </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from client_user where `id` = #{id}
+    </delete>
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from client_user where `id` = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        select t1.* from client_user t1
+        <where>
+            <if test="phone != null and phone !=''">and t1.`phone` = #{phone}</if>
+             <if test="name != null and name !=''">and t1.`name` like concat('%', #{name}, '%')</if>
+             <if test="sex != null and sex !=''">and t1.`sex` like concat('%', #{sex}, '%')</if>
+             <if test="password != null and password !=''">and t1.`password` = #{password}</if>
+            <if test="defaultAddress != null and defaultAddress !=''">and t1.`default_address` like concat('%', #{defaultAddress}, '%')</if>
+         </where>
+        <if test="limit != null">
+                limit #{limit}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from client_user
+        <where>
+            <if test="phone != null and phone !=''">and `phone` = #{phone}</if>
+            <if test="name != null and name !=''">and `name` like concat('%', #{name}, '%')</if>
+            <if test="sex != null and sex !=''">and `sex` like concat('%', #{sex}, '%')</if>
+            <if test="password != null and password !=''">and `password` like concat('%', #{password}, '%')</if>
+            <if test="defaultAddress != null and defaultAddress !=''">and `default_address` like concat('%', #{defaultAddress}, '%')</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.user.AdminUserMapper">
+    <resultMap id="BaseResultMap" type="com.graduation.user.AdminUserDO">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="password" property="password"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.graduation.user.AdminUserDO">
+        insert into admin_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="account != null">`account`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="sex != null">`sex`,</if>
+            <if test="password != null">`password`,</if>
+            `create_time`,
+            `update_time`
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="account != null">#{account},</if>
+            <if test="name != null">#{name},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="password != null">#{password},</if>
+            now(),
+            now()
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="com.graduation.user.AdminUserDO">
+        update admin_user
+        <set>
+            <if test="account != null">`account` = #{account},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="sex != null">`sex` = #{sex},</if>
+            <if test="password != null">`password` = #{password},</if>
+            `update_time` = now()
+        </set>
+        where `id` = #{id}
+    </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from admin_user where `id` = #{id}
+    </delete>
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from admin_user where `id` = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        select t1.* from admin_user t1
+        <where>
+            <if test="account != null and account !=''">and t1.`account` = #{account}</if>
+            <if test="name != null and name !=''">and t1.`name` like concat('%', #{name}, '%')</if>
+             <if test="sex != null and sex !=''">and t1.`sex` like concat('%', #{sex}, '%')</if>
+             <if test="password != null and password !=''">and t1.`password` = #{password}</if>
+        </where>
+        <if test="limit != null">
+                limit #{limit}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from admin_user
+        <where>
+            <if test="account != null and account !=''">and `account` like concat('%', #{account}, '%')</if>
+            <if test="name != null and name !=''">and `name` like concat('%', #{name}, '%')</if>
+            <if test="sex != null and sex !=''">and `sex` like concat('%', #{sex}, '%')</if>
+            <if test="password != null and password !=''">and `password` like concat('%', #{password}, '%')</if>
+        </where>
+    </select>
+</mapper>

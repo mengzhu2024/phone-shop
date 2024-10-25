@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.order.UserOrderMapper">
+    <resultMap id="BaseResultMap" type="com.graduation.order.UserOrderDO">
+        <id column="id" property="id"/>
+        <result column="phone_name" property="phoneName"/>
+        <result column="phone_img" property="phoneImg"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="actual_price" property="actualPrice"/>
+        <result column="discount_price" property="discountPrice"/>
+        <result column="buy_num" property="buyNum"/>
+        <result column="address" property="address"/>
+        <result column="user_id" property="userId"/>
+        <result column="phone_id" property="phoneId"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="remark_score" property="remarkScore"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.graduation.order.UserOrderDO">
+        insert into user_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="phoneName != null">`phone_name`,</if>
+            <if test="phoneImg != null">`phone_img`,</if>
+            <if test="totalPrice != null">`total_price`,</if>
+            <if test="actualPrice != null">`actual_price`,</if>
+            <if test="discountPrice != null">`discount_price`,</if>
+            <if test="buyNum != null">`buy_num`,</if>
+            <if test="address != null">`address`,</if>
+            <if test="userId != null">`user_id`,</if>
+            <if test="phoneId != null">`phone_id`,</if>
+            <if test="status != null">`status`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="remarkScore != null">`remark_score`,</if>
+            `create_time`,
+            `update_time`
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="phoneName != null">#{phoneName},</if>
+            <if test="phoneImg != null">#{phoneImg},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+            <if test="actualPrice != null">#{actualPrice},</if>
+            <if test="discountPrice != null">#{discountPrice},</if>
+            <if test="buyNum != null">#{buyNum},</if>
+            <if test="address != null">#{address},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="phoneId != null">#{phoneId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remarkScore != null">#{remarkScore},</if>
+            now(),
+            now()
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="com.graduation.order.UserOrderDO">
+        update user_order
+        <set>
+            <if test="phoneName != null">`phone_name` = #{phoneName},</if>
+            <if test="phoneImg != null">`phone_img` = #{phoneImg},</if>
+            <if test="totalPrice != null">`total_price` = #{totalPrice},</if>
+            <if test="actualPrice != null">`actual_price` = #{actualPrice},</if>
+            <if test="discountPrice != null">`discount_price` = #{discountPrice},</if>
+            <if test="buyNum != null">`buy_num` = #{buyNum},</if>
+            <if test="address != null">`address` = #{address},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="phoneId != null">`phone_id` = #{phoneId},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="remarkScore != null">`remark_score` = #{remarkScore},</if>
+            `update_time` = now()
+        </set>
+        where `id` = #{id}
+    </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from user_order where `id` = #{id}
+    </delete>
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from user_order where `id` = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        select t1.*, t2.name userName from user_order t1
+						left join client_user t2 on t1.user_id = t2.id
+        <where>
+            <if test="phoneName != null and phoneName !=''">and t1.`phone_name` like concat('%', #{phoneName}, '%')</if>
+             <if test="phoneImg != null and phoneImg !=''">and t1.`phone_img` like concat('%', #{phoneImg}, '%')</if>
+             <if test="totalPrice != null and totalPrice !=''">and t1.`total_price` = #{totalPrice}</if>
+            <if test="actualPrice != null and actualPrice !=''">and t1.`actual_price` = #{actualPrice}</if>
+            <if test="discountPrice != null and discountPrice !=''">and t1.`discount_price` = #{discountPrice}</if>
+            <if test="buyNum != null and buyNum !=''">and t1.`buy_num` = #{buyNum}</if>
+            <if test="address != null and address !=''">and t1.`address` like concat('%', #{address}, '%')</if>
+             <if test="userId != null and userId !=''">and t1.`user_id` = #{userId}</if>
+             <if test="status != null and status !=''">and t1.`status` = #{status}</if>
+        </where>
+        <if test="limit != null">
+                limit #{limit}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from user_order
+        <where>
+            <if test="phoneName != null and phoneName !=''">and `phone_name` like concat('%', #{phoneName}, '%')</if>
+            <if test="phoneImg != null and phoneImg !=''">and `phone_img` like concat('%', #{phoneImg}, '%')</if>
+            <if test="totalPrice != null and totalPrice !=''">and `total_price` = #{totalPrice}</if>
+            <if test="actualPrice != null and actualPrice !=''">and `actual_price` = #{actualPrice}</if>
+            <if test="discountPrice != null and discountPrice !=''">and `discount_price` = #{discountPrice}</if>
+            <if test="buyNum != null and buyNum !=''">and `buy_num` = #{buyNum}</if>
+            <if test="address != null and address !=''">and `address` like concat('%', #{address}, '%')</if>
+            <if test="status != null and status !=''">and `status` = #{status}</if>
+            <if test="userId != null and userId !=''">and `user_id` = #{userId}</if>
+        </where>
+    </select>
+</mapper>

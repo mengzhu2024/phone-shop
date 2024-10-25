@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.phone.PhoneInfoMapper">
+    <resultMap id="BaseResultMap" type="com.graduation.phone.PhoneInfoDO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="ram" property="ram"/>
+        <result column="rom" property="rom"/>
+        <result column="cpu" property="cpu"/>
+        <result column="screen_size" property="screenSize"/>
+        <result column="color" property="color"/>
+        <result column="img_url" property="imgUrl"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="price" property="price"/>
+        <result column="store_num" property="storeNum"/>
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.graduation.phone.PhoneInfoDO">
+        insert into phone_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">`name`,</if>
+            <if test="ram != null">`ram`,</if>
+            <if test="rom != null">`rom`,</if>
+            <if test="cpu != null">`cpu`,</if>
+            <if test="screenSize != null">`screen_size`,</if>
+            <if test="color != null">`color`,</if>
+            <if test="imgUrl != null">`img_url`,</if>
+            <if test="brandId != null">`brand_id`,</if>
+            <if test="price != null">`price`,</if>
+            <if test="storeNum != null">`store_num`,</if>
+            <if test="description != null">`description`,</if>
+            <if test="status != null">`status`,</if>
+            `create_time`,
+            `update_time`
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="ram != null">#{ram},</if>
+            <if test="rom != null">#{rom},</if>
+            <if test="cpu != null">#{cpu},</if>
+            <if test="screenSize != null">#{screenSize},</if>
+            <if test="color != null">#{color},</if>
+            <if test="imgUrl != null">#{imgUrl},</if>
+            <if test="brandId != null">#{brandId},</if>
+            <if test="price != null">#{price},</if>
+            <if test="storeNum != null">#{storeNum},</if>
+            <if test="description != null">#{description},</if>
+            <if test="status != null">#{status},</if>
+            now(),
+            now()
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="com.graduation.phone.PhoneInfoDO">
+        update phone_info
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="ram != null">`ram` = #{ram},</if>
+            <if test="rom != null">`rom` = #{rom},</if>
+            <if test="cpu != null">`cpu` = #{cpu},</if>
+            <if test="screenSize != null">`screen_size` = #{screenSize},</if>
+            <if test="color != null">`color` = #{color},</if>
+            <if test="imgUrl != null">`img_url` = #{imgUrl},</if>
+            <if test="brandId != null">`brand_id` = #{brandId},</if>
+            <if test="price != null">`price` = #{price},</if>
+            <if test="storeNum != null">`store_num` = #{storeNum},</if>
+            <if test="description != null">`description` = #{description},</if>
+            <if test="status != null">`status` = #{status},</if>
+            `update_time` = now()
+        </set>
+        where `id` = #{id}
+    </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from phone_info where `id` = #{id}
+    </delete>
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from phone_info where `id` = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        select t1.*, t2.name brandName from phone_info t1
+						left join phone_brand t2 on t1.brand_id = t2.id
+        <where>
+            <if test="name != null and name !=''">and t1.`name` like concat('%', #{name}, '%')</if>
+             <if test="ram != null and ram !=''">and t1.`ram` = #{ram}</if>
+            <if test="rom != null and rom !=''">and t1.`rom` = #{rom}</if>
+            <if test="cpu != null and cpu !=''">and t1.`cpu` like concat('%', #{cpu}, '%')</if>
+            <if test="screenSize != null and screenSize !=''">and t1.`screen_size` like concat('%', #{screenSize}, '%')</if>
+            <if test="color != null and color !=''">and t1.`color` like concat('%', #{color}, '%')</if>
+            <if test="imgUrl != null and imgUrl !=''">and t1.`img_url` like concat('%', #{imgUrl}, '%')</if>
+            <if test="brandId != null and brandId !=''">and t1.`brand_id` = #{brandId}</if>
+            <if test="price != null and price !=''">and t1.`price` = #{price}</if>
+            <if test="storeNum != null and storeNum !=''">and t1.`store_num` = #{storeNum}</if>
+            <if test="description != null and description !=''">and t1.`description` like concat('%', #{description}, '%')</if>
+            <if test="status != null and status !=''">and t1.`status` = #{status}</if>
+        </where>
+        <if test="limit != null">
+                limit #{limit}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from phone_info
+        <where>
+            <if test="name != null and name !=''">and `name` like concat('%', #{name}, '%')</if>
+            <if test="ram != null and ram !=''">and `ram` = #{ram}</if>
+            <if test="rom != null and rom !=''">and `rom` = #{rom}</if>
+            <if test="cpu != null and cpu !=''">and `cpu` like concat('%', #{cpu}, '%')</if>
+            <if test="screenSize != null and screenSize !=''">and `screen_size` like concat('%', #{screenSize}, '%')</if>
+            <if test="color != null and color !=''">and `color` like concat('%', #{color}, '%')</if>
+            <if test="imgUrl != null and imgUrl !=''">and `img_url` like concat('%', #{imgUrl}, '%')</if>
+            <if test="brandId != null and brandId !=''">and `brand_id` = #{brandId}</if>
+            <if test="price != null and price !=''">and `price` = #{price}</if>
+            <if test="storeNum != null and storeNum !=''">and `store_num` = #{storeNum}</if>
+            <if test="description != null and description !=''">and `description` like concat('%', #{description}, '%')</if>
+            <if test="status != null and status !=''">and `status` = #{status}</if>
+        </where>
+    </select>
+</mapper>

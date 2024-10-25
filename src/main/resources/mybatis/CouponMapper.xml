@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.coupon.CouponMapper">
+    <resultMap id="BaseResultMap" type="com.graduation.coupon.CouponDO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="discount_price" property="discountPrice"/>
+        <result column="suit_type" property="suitType"/>
+        <result column="suit_id" property="suitId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.graduation.coupon.CouponDO">
+        insert into coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">`name`,</if>
+            <if test="discountPrice != null">`discount_price`,</if>
+            <if test="suitType != null">`suit_type`,</if>
+            <if test="suitId != null">`suit_id`,</if>
+            `create_time`,
+            `update_time`
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="discountPrice != null">#{discountPrice},</if>
+            <if test="suitType != null">#{suitType},</if>
+            <if test="suitId != null">#{suitId},</if>
+            now(),
+            now()
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="com.graduation.coupon.CouponDO">
+        update coupon
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="discountPrice != null">`discount_price` = #{discountPrice},</if>
+            <if test="suitType != null">`suit_type` = #{suitType},</if>
+            <if test="suitId != null">`suit_id` = #{suitId},</if>
+            `update_time` = now()
+        </set>
+        where `id` = #{id}
+    </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from coupon where `id` = #{id}
+    </delete>
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from coupon where `id` = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        select t1.* from coupon t1
+        <where>
+            <if test="name != null and name !=''">and t1.`name` like concat('%', #{name}, '%')</if>
+             <if test="discountPrice != null and discountPrice !=''">and t1.`discount_price` = #{discountPrice}</if>
+            <if test="suitType != null and suitType !=''">and t1.`suit_type` like concat('%', #{suitType}, '%')</if>
+             <if test="suitId != null and suitId !=''">and t1.`suit_id` like concat('%', #{suitId}, '%')</if>
+         </where>
+        <if test="limit != null">
+                limit #{limit}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from coupon
+        <where>
+            <if test="name != null and name !=''">and `name` like concat('%', #{name}, '%')</if>
+            <if test="discountPrice != null and discountPrice !=''">and `discount_price` = #{discountPrice}</if>
+            <if test="suitType != null and suitType !=''">and `suit_type` like concat('%', #{suitType}, '%')</if>
+            <if test="suitId != null and suitId !=''">and `suit_id` like concat('%', #{suitId}, '%')</if>
+        </where>
+    </select>
+</mapper>
